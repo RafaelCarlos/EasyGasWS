@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="com.rafael.easygasws_EasyGasWS_war_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.rafael.easygasws.entidades.Carteira</class>
+    <class>com.rafael.easygasws.entidades.Avaliacao</class>
+    <class>com.rafael.easygasws.entidades.Distribuidora</class>
+    <class>com.rafael.easygasws.entidades.Pedido</class>
+    <class>com.rafael.easygasws.entidades.Configuracao</class>
+    <class>com.rafael.easygasws.entidades.Produto</class>
+    <class>com.rafael.easygasws.entidades.Estoque</class>
+    <class>com.rafael.easygasws.entidades.Endereco</class>
+    <class>com.rafael.easygasws.entidades.Usuario</class>
+    <class>com.rafael.easygasws.entidades.Cartao</class>
+    <class>com.rafael.easygasws.entidades.Feedback</class>
+    <class>com.rafael.easygasws.entidades.Entrega</class>
+    <class>com.rafael.easygasws.entidades.Pagamento</class>
+    <class>com.rafael.easygasws.entidades.BoletoCarteira</class>
+    <class>com.rafael.easygasws.entidades.Entregador</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/dbEasyGas"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="root"/>
+    </properties>
+  </persistence-unit>
+</persistence>
