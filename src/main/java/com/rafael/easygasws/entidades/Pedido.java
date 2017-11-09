@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.rafael.easygasws.entidades;
 
 import java.io.Serializable;
@@ -32,7 +27,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author shang
+ * @author Rafael Carlos Oliveira <rafaellcarloss@hotmail.com>
+ * @date 09/11/2017
  */
 @Entity
 @Table(name = "pedido")
@@ -178,7 +174,7 @@ public class Pedido implements Serializable {
 
     @Override
     public String toString() {
-        return "com.rafael.easygasws.entidades.Pedido[ id=" + id + " ]";
+        return "Pedido{" + "id=" + id + ", dataPedido=" + dataPedido + ", status=" + status + ", produtoList=" + produtoList + ", distribuidoraId=" + distribuidoraId + ", enderecoId=" + enderecoId + ", usuarioId=" + usuarioId + ", entregaList=" + entregaList + '}';
     }
-    
+
 }

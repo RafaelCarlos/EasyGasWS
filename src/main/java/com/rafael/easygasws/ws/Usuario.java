@@ -31,17 +31,11 @@ public class Usuario {
     public Usuario() {
     }
 
-    /**
-     * Retrieves representation of an instance of
-     * com.rafael.easygasws.ws.Usuario
-     *
-     * @return an instance of java.lang.String
-     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getJson() {
         //TODO return proper representation object
-        throw new UnsupportedOperationException();
+        return "Ola!";
     }
 
     /**

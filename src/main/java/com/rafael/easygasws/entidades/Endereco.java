@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.rafael.easygasws.entidades;
 
 import java.io.Serializable;
@@ -28,7 +23,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author shang
+ * @author Rafael Carlos Oliveira <rafaellcarloss@hotmail.com>
+ * @date 09/11/2017
  */
 @Entity
 @Table(name = "endereco")
@@ -224,7 +220,7 @@ public class Endereco implements Serializable {
 
     @Override
     public String toString() {
-        return "com.rafael.easygasws.entidades.Endereco[ id=" + id + " ]";
+        return "Endereco{" + "id=" + id + ", latitude=" + latitude + ", longitude=" + longitude + ", ruaAlameda=" + ruaAlameda + ", bairro=" + bairro + ", numero=" + numero + ", cep=" + cep + ", descricao=" + descricao + ", placeId=" + placeId + ", usuarioList=" + usuarioList + ", distribuidoraList=" + distribuidoraList + ", pedidoList=" + pedidoList + '}';
     }
-    
+
 }
