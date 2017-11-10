@@ -46,6 +46,10 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByTipoUsuario", query = "SELECT u FROM Usuario u WHERE u.tipoUsuario = :tipoUsuario")})
 public class Usuario implements Serializable {
 
+    public enum TipoUsuario {
+        ADMINISTRADOR, ENTREGADOR, CLIENTE, SUPORTE
+    }
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -94,7 +98,7 @@ public class Usuario implements Serializable {
     @NotNull
     @Size(min = 1, max = 15)
     @Column(name = "tipo_usuario")
-    private String tipoUsuario;
+    private TipoUsuario tipoUsuario;
     @ManyToMany(mappedBy = "usuarioList")
     private List<Endereco> enderecoList;
     @ManyToMany(mappedBy = "usuarioList")
@@ -121,12 +125,18 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(Integer id, String nome, String telefone, boolean ativo, Date dataCadastro, String tipoUsuario) {
+    public Usuario(Integer id, String nome, String email, String senha, String telefone, String idFacebook, boolean ativo, String token, Date dataCadastro, String tokenFcm, Date dataAtualizacao, TipoUsuario tipoUsuario) {
         this.id = id;
         this.nome = nome;
+        this.email = email;
+        this.senha = senha;
         this.telefone = telefone;
+        this.idFacebook = idFacebook;
         this.ativo = ativo;
+        this.token = token;
         this.dataCadastro = dataCadastro;
+        this.tokenFcm = tokenFcm;
+        this.dataAtualizacao = dataAtualizacao;
         this.tipoUsuario = tipoUsuario;
     }
 
@@ -218,11 +228,11 @@ public class Usuario implements Serializable {
         this.dataAtualizacao = dataAtualizacao;
     }
 
-    public String getTipoUsuario() {
+    public TipoUsuario getTipoUsuario() {
         return tipoUsuario;
     }
 
-    public void setTipoUsuario(String tipoUsuario) {
+    public void setTipoUsuario(TipoUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
 
