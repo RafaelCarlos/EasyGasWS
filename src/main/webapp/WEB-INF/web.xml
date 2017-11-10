@@ -7,11 +7,7 @@
     <display-name>EasyGasWS</display-name>
     <servlet>
         <servlet-name>EasyGasWS</servlet-name>
-        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-        <init-param>
-            <param-name>jersey.config.server.packages</param-name>
-            <param-value>com.rafael.easygasws.ws</param-value>
-        </init-param>
+       
         <init-param>
             <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
             <param-value>true</param-value>

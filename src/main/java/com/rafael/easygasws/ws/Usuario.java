@@ -5,6 +5,7 @@
  */
 package com.rafael.easygasws.ws;
 
+import com.google.gson.Gson;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -25,9 +26,6 @@ public class Usuario {
     @Context
     private UriInfo context;
 
-    /**
-     * Creates a new instance of Usuario
-     */
     public Usuario() {
     }
 
@@ -35,7 +33,10 @@ public class Usuario {
     @Produces(MediaType.APPLICATION_JSON)
     public String getJson() {
         //TODO return proper representation object
-        return "Ola!";
+        Gson g = new Gson();
+        String str = "Olá";
+        g.toJson(str);
+        return "Olá";
     }
 
     /**

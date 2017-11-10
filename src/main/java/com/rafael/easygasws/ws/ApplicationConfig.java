@@ -29,6 +29,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(com.rafael.easygasws.util.GsonMessageBodyHandler.class);
         resources.add(com.rafael.easygasws.ws.Usuario.class);
     }
     
