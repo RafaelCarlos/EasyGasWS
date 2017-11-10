@@ -11,22 +11,32 @@ import javax.persistence.Persistence;
  */
 public class JPAUtil {
 
-    private EntityManagerFactory factory;
-
-    private static JPAUtil instance;
+    private static final String PERSISTENCE_UNIT = "EasyGasPU";
+    private static final ThreadLocal<EntityManager> threadEntityManager = new ThreadLocal<>();
+    private static EntityManagerFactory entityManagerFactory;
 
     private JPAUtil() {
-        this.factory = Persistence.createEntityManagerFactory("EasyGasPU");
     }
 
-    public static synchronized JPAUtil getInstance() {
-        if (instance == null) {
-            instance = new JPAUtil();
+    public static ThreadLocal<EntityManager> getThreadEntityManager() {
+        return threadEntityManager;
+    }
+
+    public static EntityManager getEntityManager() {
+        if (entityManagerFactory == null) {
+            entityManagerFactory
+                    = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
         }
-        return instance;
+        EntityManager entityManager = threadEntityManager.get();
+        if (entityManager == null || !entityManager.isOpen()) {
+            entityManager = entityManagerFactory.createEntityManager();
+            JPAUtil.threadEntityManager.set(entityManager);
+        }
+
+        return entityManager;
     }
 
-    public EntityManager getEntityManager() {
-        return factory.createEntityManager();
+    public static void closeEntityManagerFactory() {
+        entityManagerFactory.close();
     }
 }
