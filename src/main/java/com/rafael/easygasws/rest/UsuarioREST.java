@@ -17,7 +17,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * REST Web Service
@@ -26,13 +28,13 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("usuarios")
 public class UsuarioREST {
-    
+
     @Context
     private UriInfo context;
-    
+
     public UsuarioREST() {
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getJson() {
@@ -42,27 +44,45 @@ public class UsuarioREST {
         g.toJson(str);
         return "Olá";
     }
-    
+
     @POST
     @Path("novo")
     @Produces(MediaType.APPLICATION_JSON)
-    public String novoUsuario() {
-        Usuario user = new Usuario();
-        user.setNome("Rafael Carlos");
-        user.setEmail("rafael@email.com");
-        user.setTelefone("(63) 98134-7540");
-        user.setDataCadastro(new Date());
-        user.setTipoUsuario(Usuario.TipoUsuario.SUPORTE);
-        user.setAtivo(true);
-        
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response novoUsuario(String content) {
+
+        Response response = null;
+
+        Gson g = new Gson();
+        Usuario user = g.fromJson(content, Usuario.class);
+        Usuario usuarioPersist = new Usuario();
+
+        usuarioPersist.setNome(user.getNome());
+        usuarioPersist.setEmail(user.getEmail());
+        usuarioPersist.setTelefone(user.getTelefone());
+//        user.setNome(nome);
+//        user.setEmail(email);
+//        user.setTelefone(telefone);
+//        user.setDataCadastro(new Date());
+        usuarioPersist.setTipoUsuario(Usuario.TipoUsuario.CLIENTE);
+        usuarioPersist.setAtivo(true);
+        String valor = usuarioPersist.toString();
+        System.out.println("Valor para inserir: " + valor);
+
         UsuarioRepository usuarioRepository = new UsuarioRepository();
-        
-        usuarioRepository.salvar(user);
-        if (usuarioRepository.salvar(user)) {
-            return "Usuário Adicionadod com sucesso!";
+
+//        usuarioRepository.salvar(user);
+        if (usuarioRepository.salvar(usuarioPersist)) {
+            response = Response.status(Response.Status.OK).entity(usuarioPersist).build();
+//            return "Usuário Adicionadod com sucesso!";
+//            return user.toString();
+
         } else {
-            return "Erro ao Adicionar usuário!";
+//            return "Erro ao Adicionar usuário!";
+            response = Response.status(Response.Status.NO_CONTENT).build();
         }
+
+        return response;
     }
 
     /**
@@ -72,7 +92,6 @@ public class UsuarioREST {
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public void putJson(String content
-    ) {
+    public void putJson(String content) {
     }
 }
