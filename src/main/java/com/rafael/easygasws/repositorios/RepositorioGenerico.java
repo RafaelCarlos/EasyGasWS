@@ -90,8 +90,8 @@ public class RepositorioGenerico<PK, T> implements Serializable {
         EntityManager manager = getEntityManager();
         manager.getTransaction().begin();
 
-        Query query = manager.createQuery("from " + classePersistente.getSimpleName());
-
+//        Query query = manager.createQuery("from " + classePersistente.getSimpleName());
+        Query query = manager.createQuery("select u from " + classePersistente.getSimpleName() + " u ");
         List<T> entities = query.getResultList();
 
         manager.getTransaction().commit();

@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.rafael.easygasws.entidades.Usuario;
 import com.rafael.easygasws.repositorios.UsuarioRepository;
 import java.util.Date;
+import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -24,7 +25,8 @@ import javax.ws.rs.core.Response;
 /**
  * REST Web Service
  *
- * @author shang
+ * @author Rafael Carlos Oliveira
+ * @since 13/11/2017
  */
 @Path("usuarios")
 public class UsuarioREST {
@@ -37,12 +39,16 @@ public class UsuarioREST {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getJson() {
+    public List<Usuario> getJson() {
         //TODO return proper representation object
-        Gson g = new Gson();
-        String str = "Olá";
-        g.toJson(str);
-        return "Olá";
+//        Gson g = new Gson();
+//        String str = "Olá";
+//        g.toJson(str);
+        UsuarioRepository usuarioRepository = new UsuarioRepository();
+
+        List<Usuario> usuarios = usuarioRepository.findAll();
+
+        return usuarios;
     }
 
     @POST
