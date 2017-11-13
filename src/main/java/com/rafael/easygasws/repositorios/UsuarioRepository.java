@@ -2,6 +2,7 @@ package com.rafael.easygasws.repositorios;
 
 import com.rafael.easygasws.entidades.Usuario;
 import java.util.List;
+import javax.persistence.CacheStoreMode;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -25,7 +26,7 @@ public class UsuarioRepository extends RepositorioGenerico<Integer, Usuario> {
 
     public List<Usuario> retornaViewUsers() {
         Query q = getEntityManager().createNativeQuery("SELECT * FROM usuarios_view ", Usuario.class);
-
+        q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
         return q.getResultList();
     }
 
