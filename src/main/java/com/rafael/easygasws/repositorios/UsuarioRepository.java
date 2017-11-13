@@ -26,6 +26,7 @@ public class UsuarioRepository extends RepositorioGenerico<Integer, Usuario> {
 
     public List<Usuario> retornaViewUsers() {
         Query q = getEntityManager().createNativeQuery("SELECT * FROM usuarios_view ", Usuario.class);
+        //Testando cache na consulta, afim de diminuir o tempo requisições repetitivas.
         q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
         return q.getResultList();
     }

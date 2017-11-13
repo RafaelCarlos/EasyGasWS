@@ -39,6 +39,7 @@ public class UsuarioREST {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public List<Usuario> getJson() {
         //TODO return proper representation object
 //        Gson g = new Gson();
