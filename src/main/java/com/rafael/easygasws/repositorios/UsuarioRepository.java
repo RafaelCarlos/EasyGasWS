@@ -2,6 +2,8 @@ package com.rafael.easygasws.repositorios;
 
 import com.rafael.easygasws.entidades.Usuario;
 import java.util.List;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -19,6 +21,20 @@ public class UsuarioRepository extends RepositorioGenerico<Integer, Usuario> {
         String jpql = "SELECT u FROM Usuario u WHERE u.TipoUsuario like ? ";
 
         return find(jpql, nomeTipo);
+    }
+
+    public List<Usuario> retornaViewUsers() {
+        Query q = getEntityManager().createNativeQuery("SELECT * FROM usuarios_view ", Usuario.class);
+
+        return q.getResultList();
+    }
+
+    public List<Usuario> userNamedQuery() {
+
+        TypedQuery<Usuario> named = getEntityManager().createNamedQuery("Usuario.findAll", Usuario.class);
+
+        return named.getResultList();
+
     }
 
     public List<Usuario> porSobrenome(String nome) {

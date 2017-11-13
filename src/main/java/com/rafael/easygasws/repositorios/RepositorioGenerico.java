@@ -194,7 +194,7 @@ public class RepositorioGenerico<PK, T> implements Serializable {
     }
 
     public List<T> getList() {
-        return entityManager.createQuery("FROM " + classePersistente.getName() + " ORDER BY id").getResultList();
+        return entityManager.createQuery("FROM " + classePersistente.getName() + " u ORDER BY u.nome asc").getResultList();
     }
 
     public static void closeEntityManagers() {

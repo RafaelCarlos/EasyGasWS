@@ -46,7 +46,7 @@ public class UsuarioREST {
 //        g.toJson(str);
         UsuarioRepository usuarioRepository = new UsuarioRepository();
 
-        List<Usuario> usuarios = usuarioRepository.findAll();
+        List<Usuario> usuarios = usuarioRepository.retornaViewUsers();
 
         return usuarios;
     }
