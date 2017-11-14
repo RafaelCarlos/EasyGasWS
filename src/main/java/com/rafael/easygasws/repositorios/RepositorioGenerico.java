@@ -8,6 +8,7 @@ import javax.persistence.CacheStoreMode;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -68,7 +69,7 @@ public class RepositorioGenerico<PK, T> implements Serializable {
      */
     public List<T> find(String jpql, Object... params) {
         entityManager.getTransaction().begin();
-        Query query = entityManager.createQuery(jpql);
+        TypedQuery<T> query = entityManager.createQuery(jpql, classePersistente);
 
         for (int i = 0; i < params.length; i++) {
             query.setParameter(i + 1, params[i]);
@@ -93,7 +94,7 @@ public class RepositorioGenerico<PK, T> implements Serializable {
 
 //        Query query = manager.createQuery("from " + classePersistente.getSimpleName());
         Query query = manager.createQuery("select u from " + classePersistente.getSimpleName() + " u ");
-         query.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
+        query.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
         List<T> entities = query.getResultList();
 
         manager.getTransaction().commit();

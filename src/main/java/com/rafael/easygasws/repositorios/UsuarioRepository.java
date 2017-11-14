@@ -39,9 +39,9 @@ public class UsuarioRepository extends RepositorioGenerico<Integer, Usuario> {
 
     }
 
-    public List<Usuario> porSobrenome(String nome) {
+    public List<Usuario> porNome(String nome) {
 
-        String jpql = "SELECT u FROM Usuario u WHERE u.nome like ? ";
+        String jpql = "SELECT u FROM Usuario u WHERE u.nome like ?1 ";
 
         return find(jpql, nome);
     }

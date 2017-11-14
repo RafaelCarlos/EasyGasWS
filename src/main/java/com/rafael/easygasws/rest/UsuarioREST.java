@@ -3,6 +3,8 @@ package com.rafael.easygasws.rest;
 import com.google.gson.Gson;
 import com.rafael.easygasws.entidades.Usuario;
 import com.rafael.easygasws.repositorios.UsuarioRepository;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -46,13 +48,41 @@ public class UsuarioREST {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public List<Usuario> getJson() {
+    public List<Usuario> todosUsuarios() {
         //TODO return proper representation object
 //        Gson g = new Gson();
 //        String str = "Olá";
 //        g.toJson(str);
 
         List<Usuario> usuarios = usuarioRepository.findAll();
+        return usuarios;
+    }
+
+    @GET
+    @Path("porid/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Usuario usuarioPorId(@PathParam("id") int id) {
+        //TODO return proper representation object
+//        Gson g = new Gson();
+//        String str = "Olá";
+//        g.toJson(str);
+
+        usuarioPersist = usuarioRepository.getPorId(id);
+        return usuarioPersist;
+    }
+
+    @GET
+    @Path("pornome/{nome}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Usuario> usuarioPorNome(@PathParam("nome") String nome) {
+        //TODO return proper representation object
+//        Gson g = new Gson();
+//        String str = "Olá";
+//        g.toJson(str);
+        System.out.println("Nome recebido para consulta: " + nome);
+        UsuarioRepository user = new UsuarioRepository();
+        List<Usuario> usuarios = user.porNome(nome);
+        System.out.println("Pesquisa por nome: " + usuarios);
         return usuarios;
     }
 
