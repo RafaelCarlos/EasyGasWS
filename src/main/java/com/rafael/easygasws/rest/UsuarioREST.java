@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.rafael.easygasws.rest;
 
 import com.google.gson.Gson;
@@ -10,6 +5,7 @@ import com.rafael.easygasws.entidades.Usuario;
 import com.rafael.easygasws.repositorios.UsuarioRepository;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -31,10 +27,19 @@ import javax.ws.rs.core.Response;
 @Path("usuarios")
 public class UsuarioREST {
 
+    private Usuario usuarioPersist;
+    private UsuarioRepository usuarioRepository;
+
     @Context
     private UriInfo context;
 
     public UsuarioREST() {
+    }
+
+    @PostConstruct
+    private void init() {
+        this.usuarioPersist = new Usuario();
+        this.usuarioRepository = new UsuarioRepository();
     }
 
     @GET
@@ -45,10 +50,8 @@ public class UsuarioREST {
 //        Gson g = new Gson();
 //        String str = "Olá";
 //        g.toJson(str);
-        UsuarioRepository usuarioRepository = new UsuarioRepository();
 
-        List<Usuario> usuarios = usuarioRepository.retornaViewUsers();
-
+        List<Usuario> usuarios = usuarioRepository.findAll();
         return usuarios;
     }
 
@@ -56,31 +59,27 @@ public class UsuarioREST {
     @Path("novo")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response novoUsuario(String content) {
+    public Response novoUsuario(Usuario user) {
 
         Response response = null;
+        System.out.println("Valor para inserir: " + user.toString());
 
         Gson g = new Gson();
-        Usuario user = g.fromJson(content, Usuario.class);
-        Usuario usuarioPersist = new Usuario();
-
+//        Usuario user = g.fromJson(content, Usuario.class);
         usuarioPersist.setNome(user.getNome());
         usuarioPersist.setEmail(user.getEmail());
         usuarioPersist.setTelefone(user.getTelefone());
 //        user.setNome(nome);
 //        user.setEmail(email);
 //        user.setTelefone(telefone);
-//        user.setDataCadastro(new Date());
+        usuarioPersist.setDataCadastro(new Date());
         usuarioPersist.setTipoUsuario(Usuario.TipoUsuario.CLIENTE);
         usuarioPersist.setAtivo(true);
         String valor = usuarioPersist.toString();
-        System.out.println("Valor para inserir: " + valor);
-
-        UsuarioRepository usuarioRepository = new UsuarioRepository();
 
 //        usuarioRepository.salvar(user);
         if (usuarioRepository.salvar(usuarioPersist)) {
-            response = Response.status(Response.Status.OK).entity(usuarioPersist).build();
+            response = Response.status(Response.Status.CREATED).entity(usuarioPersist).build();
 //            return "Usuário Adicionadod com sucesso!";
 //            return user.toString();
 

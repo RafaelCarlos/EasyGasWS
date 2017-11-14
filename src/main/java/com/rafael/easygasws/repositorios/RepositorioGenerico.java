@@ -4,6 +4,7 @@ import com.rafael.easygasws.util.JPAUtil;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import javax.persistence.CacheStoreMode;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
@@ -92,6 +93,7 @@ public class RepositorioGenerico<PK, T> implements Serializable {
 
 //        Query query = manager.createQuery("from " + classePersistente.getSimpleName());
         Query query = manager.createQuery("select u from " + classePersistente.getSimpleName() + " u ");
+         query.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
         List<T> entities = query.getResultList();
 
         manager.getTransaction().commit();
@@ -194,7 +196,7 @@ public class RepositorioGenerico<PK, T> implements Serializable {
     }
 
     public List<T> getList() {
-        return entityManager.createQuery("FROM " + classePersistente.getName() + " u ORDER BY u.nome asc").getResultList();
+        return entityManager.createQuery("FROM " + classePersistente.getName() + " u ORDER BY u.id ").getResultList();
     }
 
     public static void closeEntityManagers() {

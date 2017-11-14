@@ -1,4 +1,4 @@
-package com.rafael.easygasws.util;
+package com.rafael.easygasws.rest;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +21,7 @@ import com.google.gson.GsonBuilder;
 /**
  *
  * @author Rafael Carlos Oliveira <rafaellcarloss@hotmail.com>
- * @date 10/11/2017
+ * @date 14/11/2017
  */
 @Provider
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
