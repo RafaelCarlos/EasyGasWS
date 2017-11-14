@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -99,5 +100,45 @@ public class UsuarioREST {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void putJson(String content) {
+    }
+
+    @PUT
+    @Path("editar/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response edit(@PathParam("id") Integer id, Usuario entity) {
+        Response response = null;
+        usuarioPersist = usuarioRepository.getPorId(id);
+
+        usuarioPersist.setNome(entity.getNome());
+        usuarioPersist.setEmail(entity.getEmail());
+        usuarioPersist.setTelefone(entity.getTelefone());
+        usuarioPersist.setSenha(entity.getSenha());
+
+        if (usuarioRepository.atualizar(usuarioPersist)) {
+            response = Response.status(Response.Status.OK).build();
+
+            return response;
+        } else {
+            response = Response.status(Response.Status.NO_CONTENT).build();
+
+            return response;
+        }
+
+    }
+
+    @DELETE
+    @Path("excluir/{id}")
+    public Response excluir(@PathParam("id") int id) {
+        usuarioPersist = usuarioRepository.getPorId(id);
+        Response response = null;
+        if (usuarioRepository.excluir(usuarioPersist)) {
+            response = Response.status(Response.Status.OK).build();
+
+            return response;
+        } else {
+//            return "Erro ao Adicionar usuário!";
+            response = Response.status(Response.Status.NO_CONTENT).build();
+            return response;
+        }
     }
 }
