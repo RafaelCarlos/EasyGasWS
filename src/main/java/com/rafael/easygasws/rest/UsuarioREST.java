@@ -81,7 +81,7 @@ public class UsuarioREST {
 //        g.toJson(str);
         System.out.println("Nome recebido para consulta: " + nome);
         UsuarioRepository user = new UsuarioRepository();
-        List<Usuario> usuarios = user.porNome(nome);
+        List<Usuario> usuarios = user.userByName(nome);
         System.out.println("Pesquisa por nome: " + usuarios);
         return usuarios;
     }

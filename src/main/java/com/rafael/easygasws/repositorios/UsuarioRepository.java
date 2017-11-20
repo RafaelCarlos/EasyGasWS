@@ -1,10 +1,16 @@
 package com.rafael.easygasws.repositorios;
 
 import com.rafael.easygasws.entidades.Usuario;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CacheStoreMode;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -36,6 +42,30 @@ public class UsuarioRepository extends RepositorioGenerico<Integer, Usuario> {
         TypedQuery<Usuario> named = getEntityManager().createNamedQuery("Usuario.findAll", Usuario.class);
 
         return named.getResultList();
+
+    }
+
+//    public List<Usuario> userByNameCriteria(String name) {
+//        List<Usuario> entities = new ArrayList<>();
+//
+//        CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+//        CriteriaQuery<Usuario> query = builder.createQuery(Usuario.class);
+//        Root<Usuario> fromUsuario = query.from(Usuario.class);
+//        Expression<String> path = fromUsuario.get("nome");
+//
+//        Predicate l1 = builder.like(path, name);
+//
+//        return entities;
+//    }
+    public List<Usuario> userByName(String nome) {
+        String jpql = "select u from Usuario u where u.nome like :nome ";
+        TypedQuery<Usuario> query = getEntityManager().createQuery(jpql, Usuario.class);
+
+        query.setParameter("nome", "%" + nome + "%");
+
+        List<Usuario> entitades = query.getResultList();
+
+        return entitades;
 
     }
 
