@@ -7,9 +7,12 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -102,9 +105,13 @@ public class Usuario implements Serializable {
     @Size(min = 1, max = 15)
     @Column(name = "tipo_usuario")
     private TipoUsuario tipoUsuario;
-    @ManyToMany(mappedBy = "usuarioList")
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "usuario_endereco", joinColumns = @JoinColumn("usuario_id"),
+            inverseJoinColumns = @JoinColumn("endereco_id"))
     private List<Endereco> enderecoList;
-    @ManyToMany(mappedBy = "usuarioList")
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "usuario_distribuidora", joinColumns = @JoinColumn("usuario_id"),
+            inverseJoinColumns = @JoinColumn("distribuidora_id"))
     private List<Distribuidora> distribuidoraList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioId")
     private List<Configuracao> configuracaoList;
