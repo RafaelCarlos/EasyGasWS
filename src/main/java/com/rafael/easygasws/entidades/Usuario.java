@@ -41,6 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id")
     , @NamedQuery(name = "Usuario.findByNome", query = "SELECT u FROM Usuario u WHERE u.nome = :nome")
     , @NamedQuery(name = "Usuario.findByEmail", query = "SELECT u FROM Usuario u WHERE u.email = :email")
+    , @NamedQuery(name = "Usuario.findByIdGoogle", query = "SELECT u FROM Usuario u WHERE u.idGoogle = :idGoogle")
     , @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha")
     , @NamedQuery(name = "Usuario.findByTelefone", query = "SELECT u FROM Usuario u WHERE u.telefone = :telefone")
     , @NamedQuery(name = "Usuario.findByIdFacebook", query = "SELECT u FROM Usuario u WHERE u.idFacebook = :idFacebook")
@@ -69,7 +70,7 @@ public class Usuario implements Serializable {
     private String nome;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation
     @Size(max = 50)
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
     @Size(max = 255)
     @Column(name = "senha")
@@ -80,8 +81,11 @@ public class Usuario implements Serializable {
     @Column(name = "telefone")
     private String telefone;
     @Size(max = 255)
-    @Column(name = "id_facebook")
+    @Column(name = "id_facebook", unique = true)
     private String idFacebook;
+    @Size(max = 100)
+    @Column(name = "id_google", unique = true)
+    private String idGoogle;
     @Basic(optional = false)
     @NotNull
     @Column(name = "ativo")
@@ -105,13 +109,9 @@ public class Usuario implements Serializable {
     @Size(min = 1, max = 15)
     @Column(name = "tipo_usuario")
     private TipoUsuario tipoUsuario;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "usuario_endereco", joinColumns = @JoinColumn("usuario_id"),
-            inverseJoinColumns = @JoinColumn("endereco_id"))
+    @ManyToMany(mappedBy = "usuarioList")
     private List<Endereco> enderecoList;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "usuario_distribuidora", joinColumns = @JoinColumn("usuario_id"),
-            inverseJoinColumns = @JoinColumn("distribuidora_id"))
+    @ManyToMany(mappedBy = "usuarioList")
     private List<Distribuidora> distribuidoraList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioId")
     private List<Configuracao> configuracaoList;
@@ -135,13 +135,14 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(Integer id, String nome, String email, String senha, String telefone, String idFacebook, boolean ativo, String token, Date dataCadastro, String tokenFcm, Date dataAtualizacao, TipoUsuario tipoUsuario) {
+    public Usuario(Integer id, String nome, String email, String senha, String telefone, String idFacebook, String idGoogle, boolean ativo, String token, Date dataCadastro, String tokenFcm, Date dataAtualizacao, TipoUsuario tipoUsuario) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.telefone = telefone;
         this.idFacebook = idFacebook;
+        this.idGoogle = idGoogle;
         this.ativo = ativo;
         this.token = token;
         this.dataCadastro = dataCadastro;
@@ -327,6 +328,14 @@ public class Usuario implements Serializable {
         this.pedidoList = pedidoList;
     }
 
+    public String getIdGoogle() {
+        return idGoogle;
+    }
+
+    public void setIdGoogle(String idGoogle) {
+        this.idGoogle = idGoogle;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -349,7 +358,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "Usuario{" + "id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", telefone=" + telefone + ", idFacebook=" + idFacebook + ", ativo=" + ativo + ", token=" + token + ", dataCadastro=" + dataCadastro + ", tokenFcm=" + tokenFcm + ", dataAtualizacao=" + dataAtualizacao + ", tipoUsuario=" + tipoUsuario + ", enderecoList=" + enderecoList + ", distribuidoraList=" + distribuidoraList + ", configuracaoList=" + configuracaoList + ", avaliacaoList=" + avaliacaoList + ", entregadorList=" + entregadorList + ", feedbackList=" + feedbackList + ", cartaoList=" + cartaoList + ", carteiraList=" + carteiraList + ", pedidoList=" + pedidoList + '}';
+        return "Usuario{" + "id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", telefone=" + telefone + ", idFacebook=" + idFacebook + ", idGoogle=" + idGoogle + ", ativo=" + ativo + ", token=" + token + ", dataCadastro=" + dataCadastro + ", tokenFcm=" + tokenFcm + ", dataAtualizacao=" + dataAtualizacao + ", tipoUsuario=" + tipoUsuario + ", enderecoList=" + enderecoList + ", distribuidoraList=" + distribuidoraList + ", configuracaoList=" + configuracaoList + ", avaliacaoList=" + avaliacaoList + ", entregadorList=" + entregadorList + ", feedbackList=" + feedbackList + ", cartaoList=" + cartaoList + ", carteiraList=" + carteiraList + ", pedidoList=" + pedidoList + '}';
     }
 
 }
