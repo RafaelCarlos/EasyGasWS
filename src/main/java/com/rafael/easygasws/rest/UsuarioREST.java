@@ -87,6 +87,18 @@ public class UsuarioREST {
     }
 
     @POST
+    @Path("login")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Usuario loginEmail(@PathParam("email") String email, @PathParam("senha") String senha) {
+
+        usuarioPersist = usuarioRepository.loginUsuarioEmail(email, senha);
+
+        return usuarioPersist;
+
+    }
+
+    @POST
     @Path("novo")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

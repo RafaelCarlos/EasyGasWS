@@ -69,6 +69,13 @@ public class UsuarioRepository extends RepositorioGenerico<Integer, Usuario> {
 
     }
 
+    public Usuario loginUsuarioEmail(String email, String senha) {
+        String jpql = "SELECT u FROM Usuario u WHERE u.email = ?1 AND u.senha =?2";
+
+        return findOne(jpql, email, senha);
+
+    }
+
     public List<Usuario> porNome(String nome) {
 
         String jpql = "SELECT u FROM Usuario u WHERE u.nome like ?1 ";
