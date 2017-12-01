@@ -34,11 +34,11 @@ public class EnderecoREST {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String todosEnderecos() {
+    public List<Endereco> todosEnderecos() {
 
         Gson g = new Gson();
 
-        return g.toJson(enderecoRepository.findAll());
+        return enderecoRepository.findAll();
     }
 
 }

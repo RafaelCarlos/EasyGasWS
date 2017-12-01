@@ -3,16 +3,14 @@ package com.rafael.easygasws.entidades;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -22,26 +20,23 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
  * @author Rafael Carlos Oliveira <rafaellcarloss@hotmail.com>
- * @date 09/11/2017
+ * @date 01/12/2017
  */
 @Entity
 @Table(name = "usuario")
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u ORDER BY u.nome asc")
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
     , @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id")
     , @NamedQuery(name = "Usuario.findByNome", query = "SELECT u FROM Usuario u WHERE u.nome = :nome")
     , @NamedQuery(name = "Usuario.findByEmail", query = "SELECT u FROM Usuario u WHERE u.email = :email")
-    , @NamedQuery(name = "Usuario.findByIdGoogle", query = "SELECT u FROM Usuario u WHERE u.idGoogle = :idGoogle")
     , @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha")
     , @NamedQuery(name = "Usuario.findByTelefone", query = "SELECT u FROM Usuario u WHERE u.telefone = :telefone")
     , @NamedQuery(name = "Usuario.findByIdFacebook", query = "SELECT u FROM Usuario u WHERE u.idFacebook = :idFacebook")
@@ -50,7 +45,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByDataCadastro", query = "SELECT u FROM Usuario u WHERE u.dataCadastro = :dataCadastro")
     , @NamedQuery(name = "Usuario.findByTokenFcm", query = "SELECT u FROM Usuario u WHERE u.tokenFcm = :tokenFcm")
     , @NamedQuery(name = "Usuario.findByDataAtualizacao", query = "SELECT u FROM Usuario u WHERE u.dataAtualizacao = :dataAtualizacao")
-    , @NamedQuery(name = "Usuario.findByTipoUsuario", query = "SELECT u FROM Usuario u WHERE u.tipoUsuario = :tipoUsuario")})
+    , @NamedQuery(name = "Usuario.findByTipoUsuario", query = "SELECT u FROM Usuario u WHERE u.tipoUsuario = :tipoUsuario")
+    , @NamedQuery(name = "Usuario.findByIdGoogle", query = "SELECT u FROM Usuario u WHERE u.idGoogle = :idGoogle")})
 public class Usuario implements Serializable {
 
     public enum TipoUsuario {
@@ -70,7 +66,7 @@ public class Usuario implements Serializable {
     private String nome;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation
     @Size(max = 50)
-    @Column(name = "email", unique = true)
+    @Column(name = "email")
     private String email;
     @Size(max = 255)
     @Column(name = "senha")
@@ -81,11 +77,8 @@ public class Usuario implements Serializable {
     @Column(name = "telefone")
     private String telefone;
     @Size(max = 255)
-    @Column(name = "id_facebook", unique = true)
+    @Column(name = "id_facebook")
     private String idFacebook;
-    @Size(max = 100)
-    @Column(name = "id_google", unique = true)
-    private String idGoogle;
     @Basic(optional = false)
     @NotNull
     @Column(name = "ativo")
@@ -109,6 +102,9 @@ public class Usuario implements Serializable {
     @Size(min = 1, max = 15)
     @Column(name = "tipo_usuario")
     private TipoUsuario tipoUsuario;
+    @Size(max = 100)
+    @Column(name = "id_google")
+    private String idGoogle;
     @ManyToMany(mappedBy = "usuarioList")
     private List<Endereco> enderecoList;
     @ManyToMany(mappedBy = "usuarioList")
@@ -135,20 +131,20 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public Usuario(Integer id, String nome, String email, String senha, String telefone, String idFacebook, String idGoogle, boolean ativo, String token, Date dataCadastro, String tokenFcm, Date dataAtualizacao, TipoUsuario tipoUsuario) {
+    public Usuario(Integer id, String nome, String email, String senha, String telefone, String idFacebook, boolean ativo, String token, Date dataCadastro, String tokenFcm, Date dataAtualizacao, TipoUsuario tipoUsuario, String idGoogle) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.telefone = telefone;
         this.idFacebook = idFacebook;
-        this.idGoogle = idGoogle;
         this.ativo = ativo;
         this.token = token;
         this.dataCadastro = dataCadastro;
         this.tokenFcm = tokenFcm;
         this.dataAtualizacao = dataAtualizacao;
         this.tipoUsuario = tipoUsuario;
+        this.idGoogle = idGoogle;
     }
 
     public Integer getId() {
@@ -247,7 +243,16 @@ public class Usuario implements Serializable {
         this.tipoUsuario = tipoUsuario;
     }
 
+    public String getIdGoogle() {
+        return idGoogle;
+    }
+
+    public void setIdGoogle(String idGoogle) {
+        this.idGoogle = idGoogle;
+    }
+
     @XmlTransient
+    @JsonIgnore
     public List<Endereco> getEnderecoList() {
         return enderecoList;
     }
@@ -257,6 +262,7 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public List<Distribuidora> getDistribuidoraList() {
         return distribuidoraList;
     }
@@ -266,6 +272,7 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public List<Configuracao> getConfiguracaoList() {
         return configuracaoList;
     }
@@ -275,6 +282,7 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public List<Avaliacao> getAvaliacaoList() {
         return avaliacaoList;
     }
@@ -284,6 +292,7 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public List<Entregador> getEntregadorList() {
         return entregadorList;
     }
@@ -293,6 +302,7 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public List<Feedback> getFeedbackList() {
         return feedbackList;
     }
@@ -302,6 +312,7 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public List<Cartao> getCartaoList() {
         return cartaoList;
     }
@@ -311,6 +322,7 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public List<Carteira> getCarteiraList() {
         return carteiraList;
     }
@@ -320,6 +332,7 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public List<Pedido> getPedidoList() {
         return pedidoList;
     }
@@ -328,29 +341,26 @@ public class Usuario implements Serializable {
         this.pedidoList = pedidoList;
     }
 
-    public String getIdGoogle() {
-        return idGoogle;
-    }
-
-    public void setIdGoogle(String idGoogle) {
-        this.idGoogle = idGoogle;
-    }
-
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 7;
+        hash = 31 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Usuario)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Usuario other = (Usuario) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Usuario other = (Usuario) obj;
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
@@ -358,7 +368,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "Usuario{" + "id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", telefone=" + telefone + ", idFacebook=" + idFacebook + ", idGoogle=" + idGoogle + ", ativo=" + ativo + ", token=" + token + ", dataCadastro=" + dataCadastro + ", tokenFcm=" + tokenFcm + ", dataAtualizacao=" + dataAtualizacao + ", tipoUsuario=" + tipoUsuario + ", enderecoList=" + enderecoList + ", distribuidoraList=" + distribuidoraList + ", configuracaoList=" + configuracaoList + ", avaliacaoList=" + avaliacaoList + ", entregadorList=" + entregadorList + ", feedbackList=" + feedbackList + ", cartaoList=" + cartaoList + ", carteiraList=" + carteiraList + ", pedidoList=" + pedidoList + '}';
+        return "Usuario{" + "id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", telefone=" + telefone + ", idFacebook=" + idFacebook + ", ativo=" + ativo + ", token=" + token + ", dataCadastro=" + dataCadastro + ", tokenFcm=" + tokenFcm + ", dataAtualizacao=" + dataAtualizacao + ", tipoUsuario=" + tipoUsuario + ", idGoogle=" + idGoogle + ", enderecoList=" + enderecoList + ", distribuidoraList=" + distribuidoraList + ", configuracaoList=" + configuracaoList + ", avaliacaoList=" + avaliacaoList + ", entregadorList=" + entregadorList + ", feedbackList=" + feedbackList + ", cartaoList=" + cartaoList + ", carteiraList=" + carteiraList + ", pedidoList=" + pedidoList + '}';
     }
 
 }

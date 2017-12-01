@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,11 +23,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
  * @author Rafael Carlos Oliveira <rafaellcarloss@hotmail.com>
- * @date 09/11/2017
+ * @date 01/12/2017
  */
 @Entity
 @Table(name = "pagamento")
@@ -113,6 +115,7 @@ public class Pagamento implements Serializable {
     }
 
     @XmlTransient
+    @JsonIgnore
     public List<Cartao> getCartaoList() {
         return cartaoList;
     }
@@ -131,19 +134,24 @@ public class Pagamento implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 5;
+        hash = 79 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Pagamento)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Pagamento other = (Pagamento) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Pagamento other = (Pagamento) obj;
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;

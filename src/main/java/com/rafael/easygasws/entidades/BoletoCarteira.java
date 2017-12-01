@@ -3,6 +3,7 @@ package com.rafael.easygasws.entidades;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  *
  * @author Rafael Carlos Oliveira <rafaellcarloss@hotmail.com>
- * @date 09/11/2017
+ * @date 01/12/2017
  */
 @Entity
 @Table(name = "boleto_carteira")
@@ -143,19 +144,24 @@ public class BoletoCarteira implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 3;
+        hash = 53 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof BoletoCarteira)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        BoletoCarteira other = (BoletoCarteira) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BoletoCarteira other = (BoletoCarteira) obj;
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
